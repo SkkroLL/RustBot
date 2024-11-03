@@ -17,24 +17,31 @@ def c4(quantity):
     cloth = 5
     tech_trash = 2
 
-    full_explosives = explosives * quantity
-    full_tech_trash = tech_trash * quantity
-    full_cloth = cloth * quantity
-    full_powder = Explosives['gun_powder'] * explosives * quantity
-    full_fuel = Explosives['fuel'] * explosives * quantity
-    full_sulfur = Explosives['sulfur'] * explosives * quantity + (gun_powder['sulfur']*full_powder)/10
-    full_metal = Explosives['metal'] * explosives * quantity
-    full_charcoal = (gun_powder['charcoal'] * full_powder)/10
+    #ресурсы для крафта c4
+    c4_explosives = explosives * quantity
+    c4_tech_trash = tech_trash * quantity
+    c4_cloth = cloth * quantity
+
+    #ресурсы для крафта взрывчатого вещества
+    explosives_powder = Explosives['gun_powder'] * explosives * quantity
+    explosives_fuel = Explosives['fuel'] * explosives * quantity
+    explosives_sulfur = Explosives['sulfur'] * explosives * quantity
+    explosives_metal = Explosives['metal'] * explosives * quantity
+
+    # ресурсы для крафта пороха
+    powder_sulfur = (gun_powder['sulfur'] * explosives_powder)/10
+    powder_charcoal = (gun_powder['charcoal'] * explosives_powder)/10
 
     full_c4 = {
-        'взрывчатое вещество': full_explosives,
-        'Ткань': full_cloth,
-        'старые микросхемы': full_tech_trash,
-        'Порох': full_powder,
-        'Топливо': full_fuel,
-        'Сера': full_sulfur,
-        'Металл': full_metal,
-        'Уголь': full_charcoal
+        'взрывчатое вещество': c4_explosives,
+        'Ткань': c4_cloth,
+        'старые микросхемы': c4_tech_trash,
+        'Порох': explosives_powder,
+        'Топливо': explosives_fuel,
+        'Сера для ВВ': explosives_sulfur,
+        'Металл': explosives_metal,
+        'Уголь': powder_charcoal,
+        'Сера для пороха': powder_sulfur
     }
     return full_c4
 
@@ -44,22 +51,31 @@ def rocket(quantity):
     explosives = 10
     powder = 150
 
-    full_explosives = explosives * quantity
-    full_metal_pipe = metal_pipe * quantity
-    full_powder = Explosives['gun_powder'] * explosives * quantity + (powder * quantity)
-    full_fuel = Explosives['fuel'] * explosives * quantity
-    full_sulfur = Explosives['sulfur'] * explosives * quantity + (gun_powder['sulfur']*full_powder)/10
-    full_metal = Explosives['metal'] * explosives * quantity
-    full_charcoal = (gun_powder['charcoal'] * full_powder) / 10
+    #ресурсы для крафта ракет
+    rocket_explosives = explosives * quantity
+    rocket_metal_pipe = metal_pipe * quantity
+    rocket_powder = powder * quantity
+
+    #ресурсы для крафта взрывчатого вещества
+    explosives_powder = Explosives['gun_powder'] * explosives * quantity
+    explosives_fuel = Explosives['fuel'] * explosives * quantity
+    explosives_sulfur = Explosives['sulfur'] * explosives * quantity
+    explosives_metal = Explosives['metal'] * explosives * quantity
+
+    #ресурсы для крафта пороха
+    powder_sulfur = ((gun_powder['sulfur'] * explosives_powder) + (gun_powder['sulfur'] * rocket_powder))/10
+    powder_charcoal = ((gun_powder['charcoal'] * explosives_powder) + (gun_powder['charcoal'] * rocket_powder))/10
 
     full_rocket = {
-        'взрывчатое вещество': full_explosives,
-        'Порох': full_powder,
-        'Топливо': full_fuel,
-        'Сера': full_sulfur,
-        'Металл': full_metal,
-        'Уголь': full_charcoal,
-        'Металлические трубы': full_metal_pipe,
+        'взрывчатое вещество': rocket_explosives,
+        'Металлические трубы': rocket_metal_pipe,
+        'Порох для ракет': rocket_powder,
+        'Порох для ВВ': explosives_powder,
+        'Топливо': explosives_fuel,
+        'Сера для ВВ': explosives_sulfur,
+        'Металл': explosives_metal,
+        'Уголь': powder_charcoal,
+        'Сера для пороха': powder_sulfur,
     }
     return full_rocket
 
@@ -68,16 +84,19 @@ def beancan_grenade(quantity):
     metal = 20
     powder = 60
 
-    full_powder = powder * quantity
-    full_sulfur = (gun_powder['sulfur'] * full_powder) / 10
-    full_charcoal = (gun_powder['charcoal'] * full_powder) / 10
-    full_metal = metal * quantity
+    #ресурсы для крафта бобовых гранат
+    grenade_powder = powder * quantity
+    grenade_metal = metal * quantity
+
+    #ресурсы для крафта пороха
+    powder_sulfur = (gun_powder['sulfur'] * grenade_powder)/10
+    powder_charcoal = (gun_powder['charcoal'] * grenade_powder)/10
 
     full_beancan_grenade = {
-        'Порох': full_powder,
-        'Сера': full_sulfur,
-        'Уголь': full_charcoal,
-        'Металл': full_metal
+        'Металл': grenade_metal,
+        'Порох': grenade_powder,
+        'Сера': powder_sulfur,
+        'Уголь': powder_charcoal,
     }
     return full_beancan_grenade
 
@@ -87,19 +106,28 @@ def satchels(quantity):
     small_stash = 1
     grenades = 4
 
-    full_grenades = grenades * quantity
-    full_small_stash = small_stash * quantity
-    full_rope = rope * quantity
-    resources_for_grenades = beancan_grenade(full_grenades)
+    #ресурсы для крафта сачелей
+    satchels_grenades = grenades * quantity
+    satchels_small_stash = small_stash * quantity
+    satchels_rope = rope * quantity
+
+    #ресурсы для крафта бобовых гранат
+    resources_for_grenades = beancan_grenade(satchels_grenades)
+    grenade_powder = resources_for_grenades['Порох']
+    grenade_metal = resources_for_grenades['Металл']
+
+    #ресурсы для крафта пороха
+    powder_sulfur = resources_for_grenades['Сера']
+    powder_charcoal = resources_for_grenades['Уголь']
 
     full_satchels = {
-        'Веревка': full_rope,
-        'Маленький тайник': full_small_stash,
-        'Бобовая граната': full_grenades,
-        'порох': resources_for_grenades['Порох'],
-        'Сера': resources_for_grenades['Сера'],
-        'Уголь': resources_for_grenades['Уголь'],
-        'Металл': resources_for_grenades['Металл'],
+        'Бобовая граната': satchels_grenades,
+        'Маленький тайник': satchels_small_stash,
+        'Веревка': satchels_rope,
+        'порох': grenade_powder,
+        'Металл': grenade_metal,
+        'Сера': powder_sulfur,
+        'Уголь': powder_charcoal,
     }
     return full_satchels
 
@@ -109,17 +137,22 @@ def explosive_ammos(quantity):
     powder = 10
     sulfur = 10
 
-    full_metal = metal * quantity
-    full_powder = powder * quantity
-    full_sulfur = sulfur * quantity + (gun_powder['sulfur'] * full_powder)/10
-    full_charcoal = (gun_powder['charcoal'] * full_powder)/10
+    #ресурсы для крафта патронов
+    ammos_metal = metal * quantity
+    ammos_powder = powder * quantity
+    ammos_sulfur = sulfur * quantity
+
+    #ресурсы для крафта пороха
+    powder_charcoal = (gun_powder['charcoal'] * ammos_powder)/10
+    powder_sulfur = (gun_powder['sulfur'] * ammos_sulfur)/10
 
     full_explosive_ammos = {
-        'Порох': full_powder,
-        'Металл': full_metal,
-        'Сера': full_sulfur,
-        'Уголь': full_charcoal
+        'Порох': ammos_powder,
+        'Металл': ammos_metal,
+        'Сера для патронов': ammos_sulfur,
+        'Уголь': powder_charcoal,
+        'Сера для пороха': powder_sulfur
     }
     return full_explosive_ammos
 
-print(explosive_ammos(2))
+
