@@ -1,4 +1,4 @@
-import discord, raid_resources, config, os
+import discord, raid_resources, os
 from discord.ext import commands
 from dotenv import load_dotenv
 
