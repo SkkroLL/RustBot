@@ -155,4 +155,3 @@ def explosive_ammos(quantity):
     }
     return full_explosive_ammos
 
-
